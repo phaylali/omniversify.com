@@ -22,13 +22,13 @@ import '../styles/Carousel.css';
     const planets = 7;
 
     const updateLabel = () => {
-      const cells = carousel.querySelectorAll('.carousel__cell');
-      label.textContent = cells[currentIndex].textContent;
+      const cells = carousel!.querySelectorAll('.carousel__cell');
+      label!.textContent = cells[currentIndex].textContent;
     };
 
     const rotateCarousel = () => {
       const angle = (currentIndex / planets) * -360;
-      carousel.style.transform = `translateZ(-30rem) rotateY(${angle}deg)`;
+      carousel!.style.transform = `translateZ(-30rem) rotateY(${angle}deg)`;
       updateLabel();
     };
 
