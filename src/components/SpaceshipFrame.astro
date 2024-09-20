@@ -1,0 +1,107 @@
+---
+---
+
+<div class="fixed inset-0 pointer-events-none">
+  <div class="absolute inset-0 spaceship-frame">
+    <div class="corner top-left"></div>
+    <div class="corner top-right"></div>
+    <div class="corner bottom-left"></div>
+    <div class="corner bottom-right"></div>
+    <div class="absolute top-2 left-2 w-3 h-3 rounded-full bg-red-500 glow"></div>
+    <div class="absolute top-2 left-7 w-3 h-3 rounded-full bg-yellow-500 glow"></div>
+    <div class="absolute top-2 left-12 w-3 h-3 rounded-full bg-green-500 glow"></div>
+  </div>
+  <slot />
+</div>
+
+<style>
+  .spaceship-frame {
+    border: 2px solid #30cfd0;
+    box-shadow: 0 0 15px #30cfd0, inset 0 0 15px #30cfd0;
+    pointer-events: none;
+  }
+
+  .spaceship-frame::before,
+  .spaceship-frame::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, 
+      transparent, 
+      #30cfd0, 
+      #330867, 
+      #30cfd0, 
+      transparent
+    );
+    animation: scanline 6s linear infinite;
+  }
+
+  .spaceship-frame::before {
+    left: 0;
+  }
+
+  .spaceship-frame::after {
+    right: 0;
+    animation-delay: 3s;
+  }
+
+  .corner {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #30cfd0;
+  }
+
+  .top-left {
+    top: 10px;
+    left: 10px;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .top-right {
+    top: 10px;
+    right: 10px;
+    border-left: none;
+    border-bottom: none;
+  }
+
+  .bottom-left {
+    bottom: 10px;
+    left: 10px;
+    border-right: none;
+    border-top: none;
+  }
+
+  .bottom-right {
+    bottom: 10px;
+    right: 10px;
+    border-left: none;
+    border-top: none;
+  }
+
+  .glow {
+    box-shadow: 0 0 5px currentColor;
+    animation: blink 2s infinite alternate;
+  }
+
+  @keyframes scanline {
+    0% {
+      transform: translateY(-50%) translateX(-100%);
+    }
+    100% {
+      transform: translateY(-50%) translateX(100%);
+    }
+  }
+
+  @keyframes blink {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+</style>

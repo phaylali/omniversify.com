@@ -1,0 +1,100 @@
+---
+import SpaceshipFrame from '../components/SpaceshipFrame.astro';
+import Navigation from '../components/Navigation.astro';
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+const sections = [
+  { id: 'home', title: 'Home' },
+  { id: 'navigation', title: 'Navigation' },
+  { id: 'life-support', title: 'Life Support' },
+  { id: 'engine-room', title: 'Engine Room' },
+  { id: 'communication', title: 'Communication' },
+];
+
+// Generate stars for the starfield
+const stars = Array.from({ length: 100 }, () => ({
+  top: `${Math.random() * 100}%`,
+  left: `${Math.random() * 100}%`,
+  size: `${Math.random() * 2 + 1}px`,
+  delay: `${Math.random() * 2}s`,
+}));
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-space-black text-white overflow-hidden">
+    <div class="starfield">
+      {stars.map((star) => (
+        <div
+          class="star"
+          style={`top: ${star.top}; left: ${star.left}; width: ${star.size}; height: ${star.size}; animation-delay: ${star.delay};`}
+        ></div>
+      ))}
+    </div>
+    <div class="h-screen overflow-y-scroll snap-y snap-mandatory">
+      <div id="home" class="h-screen w-full snap-start">
+        <slot name="home" />
+      </div>
+      <div id="navigation" class="h-screen w-full snap-start">
+        <slot name="navigation" />
+      </div>
+      <div id="life-support" class="h-screen w-full snap-start">
+        <slot name="life-support" />
+      </div>
+      <div id="engine-room" class="h-screen w-full snap-start">
+        <slot name="engine-room" />
+      </div>
+      <div id="communication" class="h-screen w-full snap-start">
+        <slot name="communication" />
+      </div>
+    </div>
+    <SpaceshipFrame>
+      <Navigation sections={sections} />
+    </SpaceshipFrame>
+  </body>
+</html>
+
+<script>
+  // JavaScript to handle scrolling and updating active section
+  const sections = document.querySelectorAll('.snap-start');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.7,
+  };
+
+  const observerCallback = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const activeId = entry.target.id;
+        navItems.forEach((item) => {
+          if (item.getAttribute('href') === `#${activeId}`) {
+            item.classList.add('text-red-500');
+            item.classList.remove('text-gray-500');
+          } else {
+            item.classList.remove('text-red-500');
+            item.classList.add('text-gray-500');
+          }
+        });
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(observerCallback, observerOptions);
+  sections.forEach((section) => observer.observe(section));
+</script>
